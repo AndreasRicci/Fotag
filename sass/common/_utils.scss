@@ -1,0 +1,110 @@
+// Some utilities to make life easier.
+// Created by Andreas Ricci.
+
+// Breakpoints for our responsive design.
+$breakpoints: (
+        small : (min-width: 400px),
+        medium : (min-width: 760px),
+        large : (min-width: 1300px)
+);
+
+// Respond to different screen sizes.
+// Usage: @include breakpoint-for(medium) { CONTENT_BLOCK_HERE }
+@mixin breakpoint-for($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media only screen and #{inspect(map-get($breakpoints, $breakpoint))} {
+      @content; // Include the provided content block
+    }
+  }
+}
+
+@mixin box-sizing($value) {
+  box-sizing: $value;
+  -moz-box-sizing: $value;
+  -webkit-box-sizing: $value;
+}
+
+@mixin opacity($value) {
+  opacity: $value;
+  -moz-opacity: $value;
+  -khtml-opacity: $value;
+}
+
+// Truncate a single line of text in a block (or inline-block) element with an ellipsis, if necessary
+@mixin truncateSingleLine() {
+  overflow: hidden;
+  word-wrap: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis; // For Opera 9 & 10
+}
+
+// Ensures that containing block element will not allow floats to escape its bounds.
+@mixin clearfix() {
+  overflow: hidden; // Clearfix
+  zoom: 1; // Triggering "hasLayout" in IE
+  display: block; // Element must be a block to wrap around contents. Unnecessary if only using block-level elements.
+}
+
+@mixin border-radius($radius: 4px) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -khtml-border-radius: $radius;
+}
+
+@mixin box-shadow($hoffset: 2px, $voffset: 2px, $blur: 10px, $spread: 0px, $clr: #727272) {
+  -moz-box-shadow: $hoffset $voffset $blur $spread $clr;
+  -webkit-box-shadow: $hoffset $voffset $blur $spread $clr;
+  box-shadow: $hoffset $voffset $blur $spread $clr;
+}
+
+@mixin row() {
+  @include clearfix();
+  padding: $contentSpacing;
+  margin-left: -$grid-gutter-width;
+  margin-right: -$grid-gutter-width;
+
+  // Inner rows
+  .row {
+    padding: 0;
+  }
+}
+
+@mixin column($colsToSpan: $num-grid-cols) {
+  @include clearfix();
+  width: (100% / $num-grid-cols) * $colsToSpan;
+  min-height: 1px; // For columns without content
+  padding-left: $grid-gutter-width;
+  padding-right: $grid-gutter-width;
+  float: left;
+}
+
+// From pixelass at: http://stackoverflow.com/questions/2570972/css-font-border
+@function stroke($stroke, $color) {
+  $shadow: ();
+  $from: $stroke*-1;
+  @for $i from $from through $stroke {
+    @for $j from $from through $stroke {
+      $shadow: append($shadow, $i*1px $j*1px 0 $color, comma);
+    }
+  }
+  @return $shadow;
+}
+
+@mixin stroke($stroke, $color) {
+  text-shadow: stroke($stroke, $color);
+}
+
+@mixin fully-center() {
+  display: flex;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  justify-content: center; // Horizontal
+  align-items: center; // Vertical
+  -ms-flex-align: center;
+  -webkit-flex-align: center;
+  -webkit-align-items: center;
+}

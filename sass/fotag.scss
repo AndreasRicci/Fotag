@@ -1,0 +1,565 @@
+// Imports
+@import "common/variables";
+@import "common/utils";
+@import "common/colours";
+@import "common/typography";
+@import "common/buttons";
+@import "common/reset";
+
+body {
+  @include baseTypeset();
+  color: $colourText;
+  word-wrap: break-word;
+
+  // Gradient from http://www.colorzilla.com/gradient-editor/
+  background: #d3d3cf; /* Old browsers */
+  background: -moz-radial-gradient(center, ellipse cover, #d3d3cf 0%, #9e9e99 100%); /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #d3d3cf), color-stop(100%, #9e9e99)); /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover, #d3d3cf 0%, #9e9e99 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover, #d3d3cf 0%, #9e9e99 100%); /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover, #d3d3cf 0%, #9e9e99 100%); /* IE10+ */
+  background: radial-gradient(ellipse at center, #d3d3cf 0%, #9e9e99 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d3d3cf', endColorstr='#9e9e99', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+}
+
+h1 {
+  @include msText($ms5);
+  font-weight: normal;
+  margin: 0;
+}
+
+h2 {
+  @include msText($ms2);
+  color: $colourNeutralDark;
+  font-weight: normal;
+  margin: 0;
+}
+
+strong, b {
+  font-weight: bold;
+}
+
+em, i {
+  font-style: italic;
+}
+
+p {
+  margin-bottom: $contentSpacing;
+}
+
+ul.inlineList {
+  list-style: none;
+  margin-left: -$contentSpacing;
+  margin-right: -$contentSpacing;
+
+  & > li {
+    display: inline-block;
+    padding-left: $contentSpacing;
+    padding-right: $contentSpacing;
+  }
+}
+
+small {
+  @include msText($ms-2);
+}
+
+a {
+  text-decoration: none;
+  color: $colourLink;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Helper class to hide elements
+.hide {
+  display: none !important;
+}
+
+// Container for all content
+.page {
+  @include box-shadow();
+  @include border-radius(10px);
+  width: 95%;
+  max-width: $pageMaxWidth;
+  position: relative;
+  margin-top: $headerHeight + $contentSpacing * 2;
+  margin-bottom: $contentSpacing * 2.5;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: $colourTextInverse;
+  border: solid 3px #9e9e99;
+
+  @include breakpoint-for(small) {
+    margin-top: $headerHeightForSmall + $contentSpacing * 2.5;
+  }
+
+  @include breakpoint-for(medium) {
+    margin-top: $headerHeightForMedium + $contentSpacing * 2.5;
+  }
+
+  @include breakpoint-for(large) {
+    margin-top: $headerHeightForLarge + $contentSpacing * 2.5;
+  }
+}
+
+.toolbar {
+  @include clearfix();
+  @include border-radius();
+  @include box-shadow();
+  height: $headerHeight;
+  padding: $contentSpacing / 2;
+  background-color: #efefef;
+  position: fixed;
+  left: $contentSpacing;
+  right: $contentSpacing;
+  top: $contentSpacing;
+  z-index: 100;
+
+  .title {
+    @include clearfix();
+    margin: $contentSpacing / 4;
+    font-weight: bold;
+    float: left;
+    margin-right: $contentSpacing / 4;
+
+    h1 {
+      @include msText($ms4);
+      display: inline-block;
+      padding: 0;
+      margin-left: 0;
+      border-bottom: none;
+      font-weight: bold;
+
+      @include breakpoint-for(medium) {
+        margin-right: $contentSpacing;
+      }
+    }
+
+    h2 {
+      @include msText($ms1);
+      margin-left: 0;
+      border-bottom: none;
+      display: none;
+
+      @include breakpoint-for(medium) {
+        display: inline-block;
+      }
+    }
+
+    @include breakpoint-for(medium) {
+      margin-right: $contentSpacing / 2;
+    }
+  }
+
+  .controls {
+    @include clearfix();
+    @include msText($ms2);
+    font-family: 'Droid Sans', sans-serif;
+    color: $colourNeutralDark;
+    background-color: #DAD8D2;
+    float: left;
+    border: 1px solid #aeaca6;
+    padding-top: $contentSpacing / 2.5;
+    padding-left: $contentSpacing / 2.5;
+    padding-right: $contentSpacing / 2.5;
+    padding-bottom: $contentSpacing / 1.5;
+
+    .view-as {
+      @include msText($ms3);
+      float: left;
+      margin-right: $contentSpacing / 2;
+      display: none;
+
+      .list {
+        @include opacity(0.5);
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .grid {
+        @include opacity(0.5);
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .active {
+        @include opacity(1);
+      }
+
+      @include breakpoint-for(medium) {
+        margin-right: $contentSpacing * 2;
+        display: inline-block;
+      }
+    }
+
+    .rating-filter-container {
+      @include clearfix();
+      float: right;
+
+      .icon-star-empty, .icon-star-full {
+        @include stroke(1, #c39001);
+        color: $colourLink;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .rating-filter-0 {
+        margin-left: $contentSpacing / 4;
+        color: #c36a1d;
+
+        &:hover {
+          cursor: pointer;
+          color: #c34814;
+        }
+      }
+    }
+
+    @include breakpoint-for(small) {
+      float: right;
+    }
+
+    @include breakpoint-for(medium) {
+      padding-top: $contentSpacing;
+      padding-left: $contentSpacing;
+      padding-right: $contentSpacing;
+      padding-bottom: $contentSpacing / 1.25;
+    }
+  }
+
+  @include breakpoint-for(small) {
+    height: $headerHeightForSmall;
+  }
+
+  @include breakpoint-for(medium) {
+    padding: $contentSpacing;
+    height: $headerHeightForMedium;
+  }
+
+  @include breakpoint-for(large) {
+    height: $headerHeightForLarge;
+  }
+}
+
+input[type=submit], input[type=reset], input[type=button], button, a.button {
+  @include baseButtonTypeset();
+  @include buttonLookNormal();
+  @include border-radius();
+  display: inline-block;
+  text-decoration: none !important;
+  cursor: pointer;
+  text-align: center;
+  zoom: 1;
+  overflow: visible;
+  padding: $contentSpacing / 2 $contentSpacing;
+
+  &:hover {
+    @include buttonLookHover();
+  }
+
+  &:active {
+    @include buttonLookActive();
+  }
+}
+
+.marking-button {
+  float: right;
+}
+
+#unit-tests {
+  @include clearfix();
+  padding-top: $contentSpacing;
+  border-top: 2px solid $colourNeutral;
+}
+
+.image-collection {
+  .photo-container {
+    @include box-shadow();
+    @include clearfix();
+    padding: $contentSpacing * 1.5;
+    padding-bottom: $contentSpacing * 2.5;
+    margin-bottom: $contentSpacing * 2.5;
+    border: solid 2px $colourGreyDark;
+    text-align: center;
+
+    // Gradient from http://www.colorzilla.com/gradient-editor/
+    background: rgb(232, 232, 232); /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, rgba(232, 232, 232, 1) 0%, rgba(234, 231, 225, 1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(232, 232, 232, 1)), color-stop(100%, rgba(234, 231, 225, 1))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(232, 232, 232, 1) 0%, rgba(234, 231, 225, 1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, rgba(232, 232, 232, 1) 0%, rgba(234, 231, 225, 1) 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, rgba(232, 232, 232, 1) 0%, rgba(234, 231, 225, 1) 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center, rgba(232, 232, 232, 1) 0%, rgba(234, 231, 225, 1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e8e8e8', endColorstr='#eae7e1', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+
+    .photo-crop {
+      position: relative;
+      overflow: hidden;
+
+      .photo-expand-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        font-size: 80px;
+        color: black;
+
+        display: none;
+      }
+
+      .photo {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+
+        @include breakpoint-for(medium) {
+          height: 320px;
+          width: auto;
+          max-width: none;
+        }
+
+        @include breakpoint-for(large) {
+          height: 370px;
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+
+        .photo-expand-overlay {
+          @include fully-center();
+        }
+
+        .photo {
+          @include opacity(0.5); // Fade the photo out a bit
+        }
+      }
+
+      @include breakpoint-for(medium) {
+        height: 320px;
+      }
+
+      @include breakpoint-for(large) {
+        height: 370px;
+      }
+    }
+
+    .photo-metadata {
+      border-top: solid 2px $colourGreyDark;
+      margin-top: $contentSpacing;
+      padding-top: $contentSpacing / 2;
+
+      p, div {
+        @include truncateSingleLine();
+      }
+
+      .photo-metadata-other-example {
+        font-style: italic;
+      }
+
+      .photo-caption, .photo-caption-list {
+        padding: 2px;
+        border-bottom: 2px dashed #bbb;
+        outline: none;
+        white-space: nowrap;
+        overflow: hidden;
+        font-style: italic;
+
+        br {
+          display: none;
+        }
+
+        * {
+          display: inline;
+          white-space: nowrap;
+        }
+
+        &:hover, &:focus {
+          background-color: #f4f4f4;
+          border: 1px dashed #FFAF18;
+        }
+      }
+
+      .photo-metadata-other {
+        font-size: $ms-1;
+      }
+
+      .photo-rating-container {
+        font-size: 32px;
+        color: $colourLink;
+
+        span {
+          @include stroke(1, #c39001);
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      @include box-shadow(2px, 2px, 12px, 1px);
+    }
+  }
+
+  // Help with styling of file upload from: http://stackoverflow.com/questions/21842274/cross-browser-custom-styling-for-file-upload-button
+  .addPhotosContainer {
+    width: 100%;
+
+    input[type="file"] {
+      position: fixed;
+      top: -1000px;
+    }
+
+    a {
+      @include fully-center();
+
+      width: 100%;
+      height: 100%;
+      font-size: 38px;
+
+      span {
+        margin-right: $contentSpacing;
+      }
+    }
+  }
+
+  &.listView {
+    // Only allow this list view on medium+ screens since small screens already have a layout
+    @include breakpoint-for(medium) {
+      .photo-holder {
+        @include column(); // Make it take up a full row
+
+        .photo-container {
+          @include row();
+          -webkit-box-shadow: none !important;
+          -moz-box-shadow: none !important;
+          box-shadow: none !important;
+          border: none !important;
+          text-align: left !important;
+          background: none !important;
+          filter: progid:DXImageTransform.Microsoft.gradient(enabled = false) !important; // Remove background in IE
+
+          .photo-crop {
+            @include column(4);
+            @include breakpoint-for(large) {
+              @include column(3);
+            }
+          }
+
+          .photo-metadata {
+            @include column(8);
+            @include msText($ms1);
+
+            .photo-caption-example {
+              display: none !important;
+            }
+
+            .photo-caption-list {
+              display: block !important;
+            }
+
+            .photo-metadata-other {
+              @include msText($ms1);
+
+              & > div {
+                @include column();
+              }
+            }
+
+            @include breakpoint-for(large) {
+              @include column(9);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.photo-full-screen {
+  @include fully-center();
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+
+  .overlay {
+    @include opacity(0.9);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: black;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .photo-crop {
+    position: relative;
+
+    .photo-shrink-overlay {
+      @include opacity(0.5);
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 75px;
+      color: black;
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      .photo-shrink-overlay {
+        @include opacity(1);
+      }
+    }
+  }
+}
+
+// Grid rows
+.row {
+  @include row();
+}
+
+.col {
+  @include column();
+}
+
+// Different layout for medium+ screens
+@include breakpoint-for(medium) {
+  @for $i from 1 through $num-grid-cols {
+    .med-#{$i} {
+      @include column($i);
+    }
+  }
+}
+
+// Different layout for large+ screens
+@include breakpoint-for(large) {
+  @for $i from 1 through $num-grid-cols {
+    .lg-#{$i} {
+      @include column($i);
+    }
+  }
+}

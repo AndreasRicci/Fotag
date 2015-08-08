@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fotag! - Import and rate your old photos</title>
+
+    <link rel="stylesheet" href="css/fotag.css"/>
+</head>
+<body>
+<div class="page">
+    <div class="row" id="app-container">
+        <!-- Elements will be dynamically generated and placed here. -->
+
+        <!-- A template for a Toolbar. See Toolbar in view.js. -->
+        <template id="toolbar-template">
+            <div class="toolbar">
+                <div class="title">
+                    <h1>Fotag!</h1>
+
+                    <h2>Import and rate old photos</h2>
+                </div>
+                <div class="controls">
+                    <div class="view-as">
+                        <span title="View as grid." class="icon-th-large grid active"></span>
+                        <span title="View as list." class="icon-th-list list"></span>
+                    </div>
+                    <div class="rating-filter-container">
+                        <span class="control-title">Filter by:</span>
+                        <span title="Click to only show photos with 1 or more stars."
+                              class="rating-filter icon-star-empty"></span>
+                        <span title="Click to only show photos with 2 or more stars."
+                              class="rating-filter icon-star-empty"></span>
+                        <span title="Click to only show photos with 3 or more stars."
+                              class="rating-filter icon-star-empty"></span>
+                        <span title="Click to only show photos with 4 or more stars."
+                              class="rating-filter icon-star-empty"></span>
+                        <span title="Click to only show photos with 5 or more stars."
+                              class="rating-filter icon-star-empty"></span>
+                        <span title="Remove star rating filter." class="rating-filter-0 icon-cancel-circle hide"></span>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </template>
+
+    <!-- A template for an image collection, to display a a set of images. See ImageCollectionView in view.js. -->
+    <template id="image-collection-template">
+        <div class="col">
+            <div class="row image-collection">
+            </div>
+        </div>
+    </template>
+
+    <!-- A template for an image renderer, to display an image. See ImageRenderer in view.js. -->
+    <template id="image-renderer-template">
+        <div class="col med-6 lg-4 photo-holder">
+            <figure class="photo-container">
+                <div class="photo-crop">
+                    <img class="photo" src="images/"
+                         alt="Caption: CAPTION HERE, Filename: FILENAME HERE, Last Modified On: DATE HERE, Rated: X out of 5."
+                         title="Caption: CAPTION HERE, Filename: FILENAME HERE, Last Modified On: DATE HERE, Rated: X out of 5.">
+
+                    <div class="photo-expand-overlay">
+                        <span class="icon-enlarge"></span>
+                    </div>
+                </div>
+                <figcaption class="photo-metadata">
+                    <div class="row photo-caption-container">
+                        <div class="col">
+                            <p class="photo-caption" contenteditable="true">
+                                Click and edit here to caption this.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row photo-metadata-other">
+                        <div class="col med-6">
+                            <p class="photo-filename">
+                                FILENAME
+                            </p>
+                        </div>
+                        <div class="col med-6">
+                            <p class="photo-modification-date">
+                                DATE
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row photo-rating-container">
+                        <div class="col">
+                            <span title="Click to rate this 1 star." class="photo-rating-1 icon-star-empty"></span>
+                            <span title="Click to rate this 2 stars." class="photo-rating-2 icon-star-empty"></span>
+                            <span title="Click to rate this 3 stars." class="photo-rating-3 icon-star-empty"></span>
+                            <span title="Click to rate this 4 stars." class="photo-rating-4 icon-star-empty"></span>
+                            <span title="Click to rate this 5 stars." class="photo-rating-5 icon-star-empty"></span>
+                        </div>
+                    </div>
+                </figcaption>
+            </figure>
+        </div>
+    </template>
+
+    <!-- A template for a file chooser, to select multiple files. See FileChooser in view.js. -->
+    <template id="file-chooser-template">
+        <div class="col med-6 lg-4 photo-holder">
+            <figure class="photo-container">
+                <div class="photo-crop">
+                    <label class="addPhotosContainer" title="Add some photos to your collection!">
+                        <input type="file" class="photo-files-input" name="photo_files_results[]" multiple/>
+                        <a class="button"><span class="icon-plus"></span> Add photos!</a>
+                    </label>
+                </div>
+                <figcaption class="photo-metadata">
+                    <div class="row photo-caption-container">
+                        <div class="col">
+                            <p class="photo-caption photo-caption-example">
+                                Click and edit below a photo to caption it.
+                            </p>
+
+                            <p class="photo-caption-list hide">
+                                Click and edit beside a photo to caption it.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row photo-metadata-other photo-metadata-other-example">
+                        <div class="col med-6">
+                            <p class="photo-filename">
+                                Photo filename
+                            </p>
+                        </div>
+                        <div class="col med-6">
+                            <p class="photo-modification-date">
+                                Last modified on
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row photo-rating-container">
+                        <div class="col">
+                            <span title="Click to rate a photo 1 star." class="photo-rating-1 icon-star-empty"></span>
+                            <span title="Click to rate a photo 2 stars." class="photo-rating-2 icon-star-empty"></span>
+                            <span title="Click to rate a photo 3 stars." class="photo-rating-3 icon-star-empty"></span>
+                            <span title="Click to rate a photo 4 stars." class="photo-rating-4 icon-star-empty"></span>
+                            <span title="Click to rate a photo 5 stars." class="photo-rating-5 icon-star-empty"></span>
+                        </div>
+                    </div>
+                </figcaption>
+            </figure>
+        </div>
+    </template>
+</div>
+<div class="row">
+    <div class="col" id="unit-tests">
+        <button class="button marking-button"><span class="icon-checkmark"></span> Mark Me!</button>
+        <a class="button" href="unit_tests.html"><span class="icon-cog"></span> Run Unit Tests</a>
+    </div>
+</div>
+
+<div class="photo-full-screen hide">
+    <div class="overlay">
+    </div>
+    <div class="photo-crop" title="Click to close.">
+        <img class="photo">
+
+        <div class="photo-shrink-overlay">
+            <span class="icon-cross"></span>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="js/ext/underscore.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/model.js"></script>
+<script src="js/view.js"></script>
+<script src="js/fotag.js"></script>
+<script src="js/markers_code.js"></script>
+</body>
+</html>

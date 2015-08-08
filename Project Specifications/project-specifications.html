@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- For mobile viewing -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+
+    <style>
+        .container {
+            max-width: 800px;
+            margin-bottom: 50px;
+        }
+
+        .img-responsive {
+            margin-top: 20px;
+            margin-bottom: 50px;
+        }
+
+        h3 {
+            margin-top: 30px;
+        }
+
+        h4 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>CS349 Assignment 2</h1>
+    <strong><em>Due: Monday, February 9, 2015, 5PM EST</em></strong>
+
+    <div>
+        <h2>Assignment Goals</h2>
+
+        <p>
+            The goals of this assignment are to give you an opportunity to:
+        </p>
+
+        <ul>
+            <li>
+                gain experience with visual design, interface layout, and responsive design,
+            </li>
+            <li>
+                create HTML widgets from scratch,
+            </li>
+            <li>
+                learn and apply the Factory design pattern, and
+            </li>
+            <li>
+                further hone your model, view, controller (MVC) design and implementation skills.
+            </li>
+        </ul>
+
+        <p>
+            You will do so in the context of creating an interactive, single-page web app that allows
+            users to load images from the file system, rate them, and filter them based on rating.
+        </p>
+    </div>
+
+    <div>
+
+        <h2>Assignment Overview</h2>
+
+        <p>
+            In this assignment, you will create a photo rating web application called
+            <em>Fotag</em>, which allows users to display a set of images using
+            different views. Users can rate each image, and filter images based on their
+            ratings. The images will be "loaded" from the file system, and chosen using HTML5's new
+            file chooser capabilities. The images chosen, and the ratings, will be stored locally
+            using localStorage. We have provided you with code that deals with storing and retrieving
+            image collections.
+        </p>
+
+        <p>
+            <strong><em>
+                For this assignment, you cannot use any third-party HTML, JavaScript, CSS, or code-generation
+                utilities. You must create all HTML, JavaScript, and CSS on your own.
+            </em></strong>
+        </p>
+
+        <h2>
+            Fotag: Interaction Design
+        </h2>
+
+        <p>
+            Users can view the images in two modes -- grid layout (which arranges the photos in a grid format)
+            or list layout (which arranges the photos one after another, along with the metadata for each photo).
+            To switch between these two layout modes, users can click a button found in a toolbar that is fixed
+            to the top. The two view selection buttons should be image-based <em>toggle</em> buttons: when pressed, a
+            button should appear and remain depressed until the other button is pressed.
+        </p>
+
+        <p>
+            Your application should also be responsive to the user's display. More specifically, it must render
+            differently on smaller displays/screens/windows than on larger displays/screens/windows (effectively,
+            this means there are two visual designs for your app, one for small sizes, one for large sizes). These
+            differences
+            should be handled entirely by CSS designed for the two different sizes (the breakpoint is defined below).
+            When displayed on a mobile device:
+        </p>
+        <ul>
+            <li>the grid layout should size to the screen,</li>
+            <li>the list layout should show the metadata below, instead of beside, each image, and</li>
+            <li>any labels you provide for metadata should appear on lines separate from the metadata itself (for
+                example,
+                if you have a "File name:" label, it should appear on a line separate from the file name; note that
+                there are no labels in any of the wireframes provided, and they're entirely optional).
+            </li>
+        </ul>
+
+        <p>
+            In no case, should a horizontal scrollbar appear (for small or large displays).
+        </p>
+
+        <p>
+            See the following mock-ups for an idea of what the application should look like.
+        </p>
+
+        The grid view:
+        <img src="assignment_spec_images/grid_view.png" class="img-responsive">
+
+        The list view:
+        <img src="assignment_spec_images/list_view.png" class="img-responsive">
+
+        A responsive view:
+        <img src="assignment_spec_images/responsive.png" class="img-responsive">
+
+        <p>
+            Users can rate each image by selecting the number of stars to assign to that image. They should
+            also be able to filter images with a minimum rating (e.g., 3-star) by clicking on the search filter
+            on the top right of the screen, in the toolbar. Note that you will need to determine whether it
+            is useful for the user to be able to clear a rating after it is given, and if so, how that should be done.
+        </p>
+
+        <p>
+            By default, the images should be displayed as smaller thumbnails. Clicking on an image should enlarge
+            it. However, it should never be larger than the width of the screen. You should also provide a mechanism
+            to return the image to a smaller size. You may choose the means of displaying the larger image, but
+            it should be your own code (not code taken from the web).
+        </p>
+
+    </div>
+
+
+    <div>
+        <h2>
+            Implementation Details and Requirements
+        </h2>
+
+        <p>
+            <a href="fotag.html">fotag.html</a> is the web page for your application, with
+            <a href="js/fotag.js">fotag.js</a> the application's main entry point. <a href="js/model.js">model.js</a>
+            should house your models, and <a href="js/view.js">view.js</a> should contain your views.
+            You should place all of your CSS in <a href="css/fotag.css">fotag.css</a>. There are a number of examples
+            within the provided code for creating widgets, dealing with file selections, and storing and loading
+            data. Study these carefully and adapt them to your needs.
+        </p>
+
+        <h3>Selecting Images</h3>
+
+        <p>
+            We will be using HTML5's new File API to select multiple files
+            on the file system. This API provides a file name and modification date for each
+            file chosen.
+        </p>
+
+        <p>
+            You will use <code>img</code> tags to "load" images into the web page.
+            The File API does not provide an absolute path to the file, which is problematic, since
+            the <code>img</code> tag requires an absolute or relative path to a
+            file. Accordingly, we will assume all files that are chosen are chosen from the images/ directory.
+            Given this assumption, when a user chooses an image filename.jpg, and you wish to view it, you can construct
+            an <code>img</code>
+            tag whose src is images/filename.jpg. We have included
+            a handful of images in that directory to facilitate testing. Please do not delete these images,
+            as they may be used in testing.
+        </p>
+
+        <p>
+            We have already provided demo code that demonstrates how to select images and place them
+            in the models specified below. When a user selects images to view, they should be saved
+            via localStorage using the provided code. Furthermore, when reloading the page, the app
+            should automatically load the images from localStorage and redisplay them.
+        </p>
+
+        <p>
+            The File API (theoretically) also allows users to drag and drop files into the browser to select them. See
+            <a href="http://www.html5rocks.com/en/tutorials/file/dndfiles/">http://www.html5rocks.com/en/tutorials/file/dndfiles/</a>
+            for example code. This functionality is not required, but would be useful.
+        </p>
+
+        <h3>Responsive Design Breakpoints</h3>
+
+        <p>
+            For the purposes of this assignment, a "small" device should be considered any device, display, or window
+            whose width is less than 760 pixels. Set your media query breakpoints in CSS accordingly. We will test
+            your application to ensure it is responsive when the window size or device size is smaller than 760 pixels.
+        </p>
+
+        <h3>Models</h3>
+
+        <p>
+            Your implementation must make use of the model-view-controller architecture. Specifically,
+            you must implement the following models, stubbed out in <a href="js/model.js">model.js</a>:
+        </p>
+
+        <ul>
+            <li>
+                <code>ImageModel</code>
+            </li>
+            <li>
+                <code>ImageCollectionModel</code>
+            </li>
+        </ul>
+
+        <h4>ImageModel</h4>
+
+        <p>
+            The <code>ImageModel</code> represents a single image: the path to the image, its modification date,
+            the user rating, and any user-supplied caption. The modification date, user rating, and caption all
+            represent its <em>metadata</em>. You do not need to support the ability for users
+            to caption images, though that would be a nice, and useful, feature.
+        </p>
+
+        <p>
+            The ImageModel must implement the Observer pattern, and notify listeners whenever it changes in any way.
+            The signature for listeners is specified in the code.
+        </p>
+
+        <h4>ImageCollectionModel</h4>
+
+        <p>
+            The <code>ImageCollectionModel</code> represents a collection of <code>ImageModel</code> objects. It must
+            also
+            implement the Observer pattern and notify listeners whenever it, <strong>or any of its
+            <code>ImageModel</code> objects</strong>,
+            changes in any way. The signature for listeners is specified in the code.
+
+        </p>
+
+        <h3>Views</h3>
+
+        <p>
+            You must implement the following views, found in <a href="js/view.js">view.js</a>:
+        </p>
+        <ul>
+            <li>
+                <code>ImageRenderer</code>
+            </li>
+            <li>
+                <code>ImageRendererFactory</code> (technically, not a view)
+            </li>
+            <li>
+                <code>ImageCollectionView</code>
+            </li>
+            <li>
+                <code>Toolbar</code>
+            </li>
+        </ul>
+
+        <p>
+            All of your views should be able to be instantiated multiple times. In other words, they should
+            be template-based and not have IDs assigned to their individual elements. You must define
+            these views using the <code>template</code> tag in the app's HTML.
+        </p>
+
+        <h4>ImageRenderer</h4>
+
+        <p>
+            The <code>ImageRenderer</code> is the object responsible for rendering a single <code>ImageModel</code> in
+            the web page (where the <code>ImageModel</code> includes both the image and its metadata). It must
+            support two modes of rendering its contents, corresponding to either
+            list or grid view.
+        </p>
+
+        <p>
+            The renderer must also be <em>responsive</em> and change its appearance according to
+            the width of the display/window it is rendering on. Primarily, this involves changing how metadata is
+            rendered to the screen as a function of the available width. At larger widths, the metadata
+            should appear to the <em>right</em> of images. For smaller screen/device widths, it should appear
+            <em>below</em> the images.
+        </p>
+
+        <p>
+            To display an image, the <code>ImageRenderer</code> should construct an <code>img</code> tag whose src
+            points
+            to the path contained within the corresponding <code>ImageModel</code>. The <code>ImageRenderer</code>
+            should
+            render <em>thumbnails</em> of the images, rather than the images at full size. You should determine
+            what an acceptable size is for the thumbnails through user testing.
+
+        </p>
+
+        <p>
+            In addition to rendering the associated metadata, the <code>ImageRenderer</code> should also support
+            any interaction required. It should also update its view if the underlying
+            <code>ImageModel</code> changes in any way. Your view should register with the model as a listener,
+            to be informed of any changes.
+        </p>
+
+        <p>
+            The <code>ImageRenderer</code> has a method, <code>getElement()</code>, which must return
+            an element that can be added to the DOM.
+        </p>
+
+        <h4>ImageRendererFactory</h4>
+
+        <p>
+            A Factory is an object that produces other objects. In this assignment, you will create an
+            <code>ImageRendererFactory</code> that will produce new <code>ImageRenderer</code> objects.
+            The <code>ImageCollectionView</code> will use whatever <code>ImageRendererFactory</code> object
+            is installed in it to create new <code>ImageRenderer</code> objects as needed.
+        </p>
+
+        <p>
+            The Factory object is not complicated: it just creates new objects that fulfill the
+            <code>ImageRenderer</code>
+            class's contract. You can think of it as an object constructor, of sorts. For example, to
+            create a new <code>ImageRendererFactory</code> that produces the <code>ImageRenderer</code> objects
+            described above,
+            you would just need a line of code like <code>new ImageRenderer(imageModel)</code> in your code.
+        </p>
+
+        <p>
+            Factoring the design this way will allow us to substitute different <code>ImageRenderer</code>s
+            at runtime, to test your MVC architecture.
+        </p>
+
+        <h4>ImageCollectionView</h4>
+
+        <p>
+            The <code>ImageCollectionView</code> is the view for <code>ImageCollectionModel</code> objects.
+            It is also a collection of <code>ImageRenderer</code> objects.
+        </p>
+
+        <p>
+            The <code>ImageCollectionView</code> creates new <code>ImageRenderer</code> objects using
+            an <code>ImageRendererFactory</code>. By default, it should have an <code>ImageRendererFactory</code>
+            installed when it is constructed. This factory can be set at runtime, at which time, the
+            view should update to use the new factory (i.e., it should recreate the interface using the new
+            factory, whenever a new factory is installed).
+        </p>
+
+        <p>
+            You <em>may not</em> use a <code>table</code> to implement the <code>ImageCollectionView</code>. Instead,
+            you should use floats to lay out your individual <code>ImageRenderer</code> objects.
+        </p>
+
+        <p>
+            The <code>ImageCollectionView</code> provides methods to change the view type, and should also
+            respond to any changes to the underlying <code>ImageCollectionModel</code> (such as images being
+            added or removed).
+        </p>
+
+        <p>
+            The <code>ImageCollectionView</code> has a method, <code>getElement()</code>, which must return
+            an element that can be added to the DOM.
+        </p>
+
+        <h4>Toolbar</h4>
+
+        <p>
+            The <code>Toolbar</code> is a panel that has at least the following buttons:
+        </p>
+        <ul>
+            <li>
+                A list selection button
+            </li>
+            <li>
+                A grid selection button
+            </li>
+            <li>
+                A rating filter
+            </li>
+        </ul>
+
+        <p>
+            The list and grid selection buttons allow the user to toggle between list and grid views. The
+            rating filter allows the user to select the minimum star rating for displaying images. For example, if the
+            user chooses three stars, then all images displayed must have a rating of three or greater.
+        </p>
+
+        <p>
+            You can think of this Toolbar as both a model and a view. All objects interested in the
+            current view type and current filter rating should register with the Toolbar for changes to these settings.
+            That is, the Toolbar should be the definitive source for what is the currently selected view
+            and current minimum rating level.
+        </p>
+
+        <h4>File Selection</h4>
+        The designs do not specify how you should allow the user to choose what files to load and display.
+        We have included demo code that demonstrates how to get files, but it is up to you to incorporate
+        this functionality into the app's design in a way that makes for a good visual design and interactive
+        experience.
+
+        <h4>Marking Button and Unit Tests</h4>
+
+        <p>
+            You'll note in the HTML that we include a marking button and a link to unit tests. Neither
+            of these should be altered or removed. They will allow us to programmatically test and manipulate
+            your application for marking purposes.
+        </p>
+
+        <h2>Bugs</h2>
+
+        <p>
+            As with any software, there are bound to be bugs in the code, and ambiguities in
+            the specifications. We will respond to any bugs or questions and offer corrections
+            and clarifications as needed.
+        </p>
+
+    </div>
+
+    <div>
+        <h2>
+            Testing
+        </h2>
+
+        <p>
+            To unit test assignments, we will be using <a href="http://mochajs.org/">Mocha</a>,
+            <a href="http://chaijs.com/">Chai</a>, <a href="http://sinonjs.org/">Sinon</a>, and
+            <a href="https://github.com/domenic/sinon-chai">Sinon-Chai</a>. All of the components
+            necessary to do unit testing are included.
+        </p>
+
+        <h3>How to Run the Unit Tests</h3>
+
+        <p>
+            When loaded, the <a href="unit_tests.html">unit_tests.html</a> file will execute the unit tests found in
+            <a href="js/unit_tests/provided_unit_tests.js">provided_unit_tests.js</a> and
+            <a href="js/unit_tests/marking_unit_tests.js">marking_unit_tests.js</a>. There is a link in
+            the web app's page to go to this unit test. This link should remain within the code, so TAs can
+            easily execute your unit tests.
+        </p>
+
+        <p>
+            <em>You must create at least 5 unit tests for this assignment that validate your MVC
+                architecture</em> (e.g., that you can add listeners, and that they are called at appropriate
+            times). Add these unit tests in provided_unit_tests.js, and ensure they execute properly and without error!
+        </p>
+
+        <p>
+            The marking_unit_tests.js file is empty: Do not add anything to this. It will be overwritten with our own
+            unit tests at marking time, to further test your code.
+        </p>
+
+        <h3>What We Will Test for Marking</h3>
+
+        <p>
+            We will be testing your model-view-controller architecture, and your overall architecture to
+            ensure it conforms to the specifications provided. For example, for this assignment, we may
+            change the renderer factory at runtime, to change the appearance of the images rendered to the
+            screen, we may programmatically alter view and rating selections, we may create multiple
+            <code>ImageCollectionView</code>s and place them on the screen, etc. We will do so by
+            adding code to markers_code.js, and programmatically creating new views and models.
+        </p>
+    </div>
+
+    <div>
+        <h3>Assignment Constraints</h3>
+
+        <p>
+            You must complete the assignment within the following constraints:
+        </p>
+
+        <ul>
+
+            <li>You must use only HTML, JavaScript and CSS that you, yourself, have created.
+                <em>You may not use any other third-party JavaScript or CSS files for this assignment, including
+                    web frameworks and code generation tools.</em> However, we have included underscore.js.
+            </li>
+
+            <li>
+                This is a single-page web application: <em>there should be only one web page that the user loads
+                and interacts with -- they should never leave it</em> (with the exception of the unit tests).
+                <em>We will take off significant marks if you redirect the user to another page.</em>
+            </li>
+
+            <li>
+                The wireframe designs are meant to be a suggestion for how the interface and interaction could be
+                supported. You have latitude to change the design, provided the functionality remains the same,
+                and your changes are an improvement to the design provided.
+            </li>
+
+            <li>
+                All of your JavaScript files should work with (and include) <code>'use strict';</code>.
+            </li>
+
+            <li>
+                You must use the convention in the code of creating functions that return your classes, to
+                create modules.
+            </li>
+
+            <li>
+                You may not use <code>table</code> elements anywhere in this assignment. All layout must
+                be done using floats.
+            </li>
+
+            <li>
+                You must use the <code>addEventListener()</code> means of responding to events in the browser.
+            </li>
+
+            <li>
+                You may use <em>code snippets</em> from third-party sources, but no external libraries (HTML, JS,
+                or CSS), or external code-generation tools. You must cite the use of any
+                third-party code (including a URL if the example was obtained online).
+            </li>
+
+            <li>
+                Your assignment may not make use of any external files loaded over the Internet. It will be
+                tested locally, in offline moded.
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <h2>Marking</h2>
+
+        <p>
+            To receive a great mark, you must implement the system as described above, under the given constraints,
+            with all unit tests passing, while having an aesthetically pleasing design and a great user experience.
+        </p>
+
+        <p>
+            As a <em>rough</em> guide, <em>about 25%</em> of your mark will be allocated to the visual design and
+            user experience, with the rest allocated to implementation concerns. Note that the implementation
+            specifications
+            include items related to user experience, such as responsive design and responsive layout. These aspects
+            of user experience will be part of the implementation marks.
+        </p>
+
+        <p>
+            TAs will mark your assignment using the latest version of Chrome on whatever platform
+            they use on a daily basis. In theory, the specific platform shouldn't matter. If we
+            find platform differences, we'll handle them as they arise. They will mark the assignment
+            in "offline" mode (i.e., with no access to the Internet).
+        </p>
+
+    </div>
+
+    <div>
+        <h2>How to Submit</h2>
+        You will use subversion to both check out and submit your assignment. Details can be found on the
+        <a href="https://hci.cs.uwaterloo.ca/courses/CS349/w15/about.html#svn">course website</a>.
+    </div>
+
+</div>
+
+</body>
+</html>
+
